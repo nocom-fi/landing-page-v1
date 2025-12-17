@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #870ec4;
+  --font-family-serif: 'Playfair Display', serif;
+  --font-size-xs: 0.8rem;
+  --font-size-sm: 0.925rem;
+  --font-size-base: 1.05rem;
+  --font-size-lg: 1.175rem;
+  --font-size-xl: 1.3rem;
+  --font-size-2xl: 1.6rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3.25rem;
+  --font-size-6xl: 4rem;
+  --font-size-7xl: 5rem;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.glow-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(135, 14, 196, 0.15) 0%, rgba(0, 0, 0, 0) 50%);
+}
