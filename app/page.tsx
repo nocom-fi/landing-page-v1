@@ -6,7 +6,7 @@ const jsonLd = {
   name: 'Nocom.Finance',
   description: 'Powered by Aztec. Overcollateralized isolated lending that keeps your lending strategies private.',
   url: 'https://nocom.finance',
-  logo: 'https://nocom.finance/favicon.svg',
+  logo: 'https://nocom.finance/favicon-96x96.png',
   sameAs: [
     'https://x.com/nocomfinance',
     'https://github.com/nocom-fi',
