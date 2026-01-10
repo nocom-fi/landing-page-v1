@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Layers, ArrowRight, Sparkles, Mail, ChevronRight, Github } from 'lucide-react'
+import { Layers, Sparkles, Mail, ChevronRight, Github } from 'lucide-react'
 import ParticleBackground from './ParticleBackground'
 
 export default function LandingContent() {
@@ -46,22 +46,17 @@ export default function LandingContent() {
       ></div>
 
       {/* Navigation */}
-      <header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
+      <header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-8">
         <div className="flex items-center gap-2 group cursor-pointer">
           <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[#870ec4]/50 transition-colors duration-300">
             <Layers className="w-4 h-4 text-white group-hover:text-[#870ec4] transition-colors" />
           </div>
           <span className="text-white font-medium tracking-tight text-base">Nocom<span className="text-[#870ec4]">.Fi</span></span>
         </div>
-
-        <a href="#" className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-300">
-          <span>View Documentation</span>
-          <ArrowRight className="w-4 h-4" />
-        </a>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 flex flex-col justify-center items-center px-4 sm:px-6 w-full max-w-5xl mx-auto text-center mt-[-40px]">
+      <main className="relative z-10 flex-1 flex flex-col justify-center items-center px-4 sm:px-6 w-full max-w-5xl mx-auto text-center sm:mt-[-40px]">
         <div
           ref={contentBoxRef}
           className="relative flex flex-col items-center px-8 py-12 sm:px-12 sm:py-16 rounded-2xl border border-[#870ec4]/20 bg-[#050505]/50 backdrop-blur-sm"
