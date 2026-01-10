@@ -1,13 +1,37 @@
-import { useRef } from 'react'
-import { Layers, ArrowRight, Sparkles, Mail, ChevronRight, Github } from 'lucide-react'
-import ParticleBackground from './components/ParticleBackground'
+'use client'
 
-function App() {
+import { useRef, useState } from 'react'
+import { Layers, ArrowRight, Sparkles, Mail, ChevronRight, Github } from 'lucide-react'
+import ParticleBackground from './ParticleBackground'
+
+export default function LandingContent() {
   const contentBoxRef = useRef<HTMLDivElement>(null)
+  const [email, setEmail] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!email) return
+
+    // Optimistic UI - immediately show success
+    setIsSubmitted(true)
+
+    // Fire-and-forget POST to API (no await, no error handling for user)
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }).catch(() => {
+      // Silently fail - user never sees errors
+    })
+
+    // Clear input
+    setEmail('')
+  }
 
   return (
     <div className="bg-[#050505] text-slate-300 min-h-screen flex flex-col relative overflow-hidden selection:bg-[#870ec4] selection:text-white antialiased">
-
       {/* Particle Background */}
       <ParticleBackground contentBoxRef={contentBoxRef} />
 
@@ -38,13 +62,10 @@ function App() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-1 flex flex-col justify-center items-center px-4 sm:px-6 w-full max-w-5xl mx-auto text-center mt-[-40px]">
-
-        {/* Content Box - particles collide with this */}
         <div
           ref={contentBoxRef}
           className="relative flex flex-col items-center px-8 py-12 sm:px-12 sm:py-16 rounded-2xl border border-[#870ec4]/20 bg-[#050505]/50 backdrop-blur-sm"
         >
-          {/* Subtle glow border effect */}
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#870ec4]/10 via-transparent to-[#870ec4]/10 pointer-events-none" />
 
           {/* Badge */}
@@ -70,33 +91,46 @@ function App() {
             Secure undercollateralized loans with complete on-chain anonymity.
           </p>
 
-          {/* Input Form */}
-          <form className="relative w-full max-w-lg mx-auto flex flex-col sm:flex-row gap-3 group" onSubmit={(e) => e.preventDefault()}>
-            <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-slate-500" />
-              </div>
-              <input
-                type="email"
-                placeholder="Enter your email for early access"
-                className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#870ec4]/50 focus:border-[#870ec4] transition-all duration-300 text-base font-normal shadow-lg shadow-black/20"
-                required
-              />
+          {/* Input Form - with optimistic UI */}
+          {isSubmitted ? (
+            <div className="relative w-full max-w-lg mx-auto flex items-center justify-center py-3.5 px-8 bg-[#870ec4]/20 border border-[#870ec4]/40 rounded-xl">
+              <span className="text-[#d8b4fe] font-medium flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Submitted! We&apos;ll be in touch.
+              </span>
             </div>
-            <button
-              type="submit"
-              className="px-8 py-3.5 bg-[#870ec4] hover:bg-[#720aa6] text-white rounded-xl font-medium transition-all duration-300 shadow-[0_0_20px_-5px_rgba(135,14,196,0.5)] hover:shadow-[0_0_30px_-5px_rgba(135,14,196,0.6)] whitespace-nowrap text-base flex items-center justify-center gap-2 group/btn"
+          ) : (
+            <form
+              className="relative w-full max-w-lg mx-auto flex flex-col sm:flex-row gap-3 group"
+              onSubmit={handleSubmit}
             >
-              <span>Request Access</span>
-              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-            </button>
-          </form>
+              <div className="relative flex-1">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-slate-500" />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email for early access"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#870ec4]/50 focus:border-[#870ec4] transition-all duration-300 text-base font-normal shadow-lg shadow-black/20"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-8 py-3.5 bg-[#870ec4] hover:bg-[#720aa6] text-white rounded-xl font-medium transition-all duration-300 shadow-[0_0_20px_-5px_rgba(135,14,196,0.5)] hover:shadow-[0_0_30px_-5px_rgba(135,14,196,0.6)] whitespace-nowrap text-base flex items-center justify-center gap-2 group/btn"
+              >
+                <span>Request Access</span>
+                <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+              </button>
+            </form>
+          )}
 
           <p className="relative mt-6 text-sm text-slate-600">
             Limited spots available for V1 mainnet launch.
           </p>
         </div>
-
       </main>
 
       {/* Footer */}
@@ -115,9 +149,6 @@ function App() {
           </a>
         </div>
       </footer>
-
     </div>
   )
 }
-
-export default App

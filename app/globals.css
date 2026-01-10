@@ -2,7 +2,8 @@
 
 @theme {
   --color-brand: #870ec4;
-  --font-family-serif: 'Playfair Display', serif;
+  --font-family-serif: var(--font-playfair), 'Playfair Display', serif;
+  --font-family-sans: var(--font-inter), 'Inter', sans-serif;
   --font-size-xs: 0.8rem;
   --font-size-sm: 0.925rem;
   --font-size-base: 1.05rem;
@@ -17,11 +18,11 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 .font-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-family-serif);
 }
 
 .glow-bg {
