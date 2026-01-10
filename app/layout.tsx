@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Inter, DM_Serif_Display } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
@@ -8,10 +8,10 @@ const inter = Inter({
   weight: ['300', '400', '500', '600'],
 })
 
-const playfair = Playfair_Display({
+const dmSerif = DM_Serif_Display({
   subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '500'],
+  variable: '--font-dm-serif',
+  weight: ['400'],
   style: ['normal', 'italic'],
 })
 
@@ -62,9 +62,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`dark ${inter.variable} ${dmSerif.variable}`}>
       <head>
-        <meta name="theme-color" content="#050505" />
+        <meta name="theme-color" content="#020103" />
       </head>
       <body>{children}</body>
     </html>
