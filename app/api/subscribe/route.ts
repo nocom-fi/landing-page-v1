@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit } from './rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    if (!rateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const { email } = await request.json()
 
     if (!email || typeof email !== 'string') {

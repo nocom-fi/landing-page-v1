@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Inter, DM_Serif_Display } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const inter = Inter({
@@ -8,39 +9,40 @@ const inter = Inter({
   weight: ['300', '400', '500', '600'],
 })
 
-const playfair = Playfair_Display({
+const dmSerif = DM_Serif_Display({
   subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '500'],
+  variable: '--font-dm-serif',
+  weight: ['400'],
   style: ['normal', 'italic'],
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nocom.finance'),
-  title: 'Nocom.Finance - Private Crosschain Money Market',
-  description: 'Powered by Aztec. Overcollateralized isolated lending that keeps your lending strategies private.',
-  keywords: ['DeFi', 'private lending', 'Aztec', 'crosschain', 'money market', 'blockchain', 'privacy', 'overcollateralized lending'],
-  authors: [{ name: 'Nocom.Finance' }],
-  creator: 'Nocom.Finance',
+  title: 'Nocom Finance - Private Lending for DeFi',
+  description: 'Private lending markets for any asset, on any chain. Secure, decentralized lending powered by Aztec zero-knowledge technology.',
+  keywords: ['DeFi', 'private lending', 'decentralized finance', 'crypto lending', 'blockchain', 'Aztec', 'zero-knowledge', 'privacy', 'lending protocol', 'multi-chain'],
+  authors: [{ name: 'Nocom Finance' }],
+  creator: 'Nocom Finance',
   openGraph: {
     type: 'website',
     url: 'https://nocom.finance/',
-    siteName: 'Nocom.Finance',
-    title: 'Nocom.Finance - Private Crosschain Money Market',
-    description: 'Powered by Aztec. Overcollateralized isolated lending that keeps your lending strategies private.',
+    siteName: 'Nocom Finance',
+    title: 'Nocom Finance - Private Lending for DeFi',
+    description: 'Private lending markets for any asset, on any chain. Secure, decentralized lending powered by Aztec zero-knowledge technology.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Nocom.Finance - Private Crosschain Money Market',
+        alt: 'Nocom Finance - Private Lending for DeFi',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nocom.Finance - Private Crosschain Money Market',
-    description: 'Powered by Aztec. Overcollateralized isolated lending that keeps your lending strategies private.',
+    site: '@nocomfinance',
+    title: 'Nocom Finance - Private Lending for DeFi',
+    description: 'Private lending markets for any asset, on any chain. Secure, decentralized lending powered by Aztec zero-knowledge technology.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -54,6 +56,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://nocom.finance',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
@@ -61,12 +74,36 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialService',
+    name: 'Nocom Finance',
+    description: 'Private lending markets for any asset, on any chain. Secure, decentralized lending powered by Aztec zero-knowledge technology.',
+    url: 'https://nocom.finance',
+    logo: 'https://nocom.finance/logo_transparent_purple.png',
+    sameAs: [
+      'https://x.com/nocomfinance',
+      'https://github.com/nocom-fi'
+    ],
+    brand: {
+      '@type': 'Brand',
+      name: 'Nocom Finance'
+    }
+  }
+
   return (
-    <html lang="en" className={`dark ${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`dark ${inter.variable} ${dmSerif.variable}`}>
       <head>
-        <meta name="theme-color" content="#050505" />
+        <meta name="theme-color" content="#020103" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }

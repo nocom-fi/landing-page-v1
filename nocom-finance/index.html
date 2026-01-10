@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nocom Finance</title>
+    
+    <!-- Dynamic SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'%3E%3Cpath d='M 90.1 37.5 A 42 42 0 1 0 90.1 62.5' stroke='white' stroke-width='8' stroke-linecap='butt'/%3E%3Ccircle cx='91' cy='50' r='7' fill='%238B5CF6'/%3E%3Cpath d='M 29 25 L 29 75 L 41 75 L 41 46 L 59 75 L 71 75 L 71 25 L 59 25 L 59 54 L 41 25 Z' fill='white'/%3E%3C/svg%3E">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"DM Serif Display"', 'serif'],
+              sans: ['"Inter"', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            colors: {
+              nocom: {
+                bg: '#020103',
+                surface: '#0F0F11',
+                border: '#2A2A2E',
+                text: '#ffffff',
+                muted: '#888888',
+              },
+              aztec: {
+                purple: '#8B5CF6', /* Rich Violet */
+                glow: '#5B21B6',   /* Deep Purple */
+              }
+            },
+            animation: {
+              'spin-slow': 'spin 30s linear infinite',
+              'pulse-slow': 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'grid-scroll': 'grid-scroll 20s linear infinite',
+            },
+            keyframes: {
+              'grid-scroll': {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '50px 50px' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #020103;
+        color: white;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

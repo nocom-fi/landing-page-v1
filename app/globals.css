@@ -1,9 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #870ec4;
-  --font-family-serif: var(--font-playfair), 'Playfair Display', serif;
+  /* Brand Colors - Aztec Purple Theme */
+  --color-aztec-purple: #8B5CF6;
+  --color-aztec-glow: #5B21B6;
+  --color-nocom-bg: #020103;
+  --color-nocom-surface: #0F0F11;
+  --color-nocom-border: #2A2A2E;
+  --color-nocom-muted: #8B8B9B;
+
+  /* Legacy brand alias */
+  --color-brand: #8B5CF6;
+
+  /* Font Families */
+  --font-family-serif: var(--font-dm-serif), 'DM Serif Display', serif;
   --font-family-sans: var(--font-inter), 'Inter', sans-serif;
+
+  /* Font Sizes */
   --font-size-xs: 0.8rem;
   --font-size-sm: 0.925rem;
   --font-size-base: 1.05rem;
@@ -17,6 +30,12 @@
   --font-size-7xl: 5rem;
 }
 
+/* Keyframes */
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
 body {
   font-family: var(--font-family-sans);
 }
@@ -25,6 +44,18 @@ body {
   font-family: var(--font-family-serif);
 }
 
-.glow-bg {
-  background: radial-gradient(circle at 50% 0%, rgba(135, 14, 196, 0.15) 0%, rgba(0, 0, 0, 0) 50%);
+/* Animated Grid Background */
+.animated-grid {
+  animation: grid-scroll 20s linear infinite;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 0%, transparent 70%);
+}
+
+/* SVG Noise Texture */
+.noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }

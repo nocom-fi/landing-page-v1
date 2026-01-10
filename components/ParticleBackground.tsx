@@ -69,10 +69,10 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
     const outputPass = new OutputPass();
     composer.addPass(outputPass);
 
-    // Brand color: #870ec4
-    const brandColor = 0x870ec4;
-    const particleColor = 0xa855f7; // Lighter purple for particles
-    const burstColor = 0xd8b4fe; // Even lighter for bursts
+    // Brand color: #8B5CF6 (Aztec Purple)
+    const brandColor = 0x8B5CF6;
+    const particleColor = 0x8B5CF6; // Aztec purple for particles
+    const burstColor = 0xc4b5fd; // Lighter purple for bursts
 
     // Convert screen coordinates to world coordinates
     function screenToWorld(screenX: number, screenY: number): THREE.Vector3 {
@@ -89,25 +89,30 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
       return pos;
     }
 
-    // Get box bounds in world coordinates
-    function getBoxBounds() {
+    // Get circle bounds in world coordinates
+    function getCircleBounds() {
       if (!contentBoxRef.current) {
-        return { left: -2, right: 2, top: 2, bottom: -2 };
+        return { centerX: 0, centerY: 0, radius: 2 };
       }
       const rect = contentBoxRef.current.getBoundingClientRect();
-      const topLeft = screenToWorld(rect.left, rect.top);
-      const bottomRight = screenToWorld(rect.right, rect.bottom);
+      const centerScreen = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      };
+      const center = screenToWorld(centerScreen.x, centerScreen.y);
+      // Use half the width as radius (it's a square element), increased by 25%
+      const edgePoint = screenToWorld(rect.right, centerScreen.y);
+      const radius = Math.abs(edgePoint.x - center.x) * 1.25;
       return {
-        left: topLeft.x,
-        right: bottomRight.x,
-        top: topLeft.y,
-        bottom: bottomRight.y
+        centerX: center.x,
+        centerY: center.y,
+        radius: radius
       };
     }
 
     // Particle system
     const particles: Particle[] = [];
-    const MAX_PARTICLES = 60;
+    const MAX_PARTICLES = 10;
     const PARTICLE_POOL: Particle[] = [];
     const burstParticles: BurstParticle[] = [];
     const MAX_BURST_PARTICLES = 150;
@@ -152,21 +157,22 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
 
         const zDepth = (Math.random() - 0.5) * 0.5;
 
-        // Get box bounds to control spawn positions
-        const bounds = getBoxBounds();
-        const boxTop = bounds.top;
-        const boxBottom = bounds.bottom;
+        // Get circle bounds to control spawn positions
+        const circle = getCircleBounds();
 
-        // 15% above, 15% below, 70% will hit the box
+        // 15% above, 15% below, 70% will hit the circle
         const spawnType = Math.random();
         let spawnY: number;
 
         if (spawnType < 0.15) {
-          spawnY = boxTop + Math.random() * (viewHeight / 2 - boxTop);
+          // Spawn above circle
+          spawnY = circle.centerY + circle.radius + Math.random() * (viewHeight / 2 - circle.centerY - circle.radius);
         } else if (spawnType < 0.30) {
-          spawnY = boxBottom - Math.random() * (viewHeight / 2 + boxBottom);
+          // Spawn below circle
+          spawnY = circle.centerY - circle.radius - Math.random() * (viewHeight / 2 + circle.centerY - circle.radius);
         } else {
-          spawnY = boxBottom + Math.random() * (boxTop - boxBottom);
+          // Spawn at heights that will hit the circle
+          spawnY = circle.centerY + (Math.random() - 0.5) * circle.radius * 1.8;
         }
 
         if (fromLeft) {
@@ -180,7 +186,7 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
         const target = new THREE.Vector3(targetX, targetY, zDepth);
 
         this.velocity.copy(target).sub(this.mesh.position).normalize();
-        this.speed = 0.04 + Math.random() * 0.05;
+        this.speed = 0.014 + Math.random() * 0.017;
         this.velocity.multiplyScalar(this.speed);
 
         this.life = 1;
@@ -198,33 +204,35 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
 
         this.mesh.position.add(this.velocity);
 
-        const bounds = getBoxBounds();
+        const circle = getCircleBounds();
         const px = this.mesh.position.x;
         const py = this.mesh.position.y;
 
-        const inYRange = py > bounds.bottom && py < bounds.top;
-        const prevInYRange = prevY > bounds.bottom && prevY < bounds.top;
+        // Calculate distance from circle center
+        const dx = px - circle.centerX;
+        const dy = py - circle.centerY;
+        const distFromCenter = Math.sqrt(dx * dx + dy * dy);
 
-        if (inYRange || prevInYRange) {
-          if (prevX <= bounds.left && px >= bounds.left) {
-            this.mesh.position.x = bounds.left;
-            this.createBurst();
-            this.deactivate();
-            return;
-          }
+        const prevDx = prevX - circle.centerX;
+        const prevDy = prevY - circle.centerY;
+        const prevDistFromCenter = Math.sqrt(prevDx * prevDx + prevDy * prevDy);
 
-          if (prevX >= bounds.right && px <= bounds.right) {
-            this.mesh.position.x = bounds.right;
-            this.createBurst();
-            this.deactivate();
-            return;
-          }
+        // Check if particle crossed into the circle
+        if (prevDistFromCenter >= circle.radius && distFromCenter < circle.radius) {
+          // Move particle to circle edge for burst position
+          const angle = Math.atan2(dy, dx);
+          this.mesh.position.x = circle.centerX + Math.cos(angle) * circle.radius;
+          this.mesh.position.y = circle.centerY + Math.sin(angle) * circle.radius;
+          this.createBurst();
+          this.deactivate();
+          return;
+        }
 
-          if (px > bounds.left && px < bounds.right) {
-            this.createBurst();
-            this.deactivate();
-            return;
-          }
+        // Also check if particle is inside circle (in case it spawned inside)
+        if (distFromCenter < circle.radius) {
+          this.createBurst();
+          this.deactivate();
+          return;
         }
 
         this.life -= deltaTime / this.maxLife;
@@ -261,7 +269,7 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
       life: number;
 
       constructor() {
-        const geometry = new THREE.CircleGeometry(0.02, 6);
+        const geometry = new THREE.CircleGeometry(0.01, 6);
         const material = new THREE.MeshBasicMaterial({
           color: burstColor,
           transparent: true,
@@ -281,7 +289,7 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
         this.mesh.position.copy(position);
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.04 + Math.random() * 0.06;
+        const speed = 0.02 + Math.random() * 0.03;
         this.velocity.set(
           Math.cos(angle) * speed,
           Math.sin(angle) * speed,
@@ -431,7 +439,7 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
+      className="fixed inset-0 z-[1] pointer-events-none"
     />
   );
 }
