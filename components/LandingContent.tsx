@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import { Github } from 'lucide-react'
 import ParticleBackground from './ParticleBackground'
-import { Logo } from './Logo'
 import { InputForm } from './InputForm'
 
 // X (Twitter) Logo SVG
@@ -61,7 +60,11 @@ export default function LandingContent() {
         {/* Header */}
         <header className="flex justify-start items-start w-full">
           <div className="opacity-70 hover:opacity-100 transition-opacity cursor-pointer">
-            <Logo size={24} />
+            <img
+              src="/logo_transparent_white.png"
+              alt="Nocom Finance"
+              className="w-6 h-6"
+            />
           </div>
         </header>
 
@@ -73,6 +76,18 @@ export default function LandingContent() {
             className="absolute w-[500px] h-[500px] md:w-[600px] md:h-[600px] rounded-full pointer-events-none"
             style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
           />
+
+          {/* Logo lockup */}
+          <div className="flex items-center gap-3 mb-8">
+            <img
+              src="/logo_transparent_purple.png"
+              alt="Nocom Finance"
+              className="w-12 h-12 md:w-14 md:h-14"
+            />
+            <span className="text-white text-xl md:text-2xl font-medium tracking-tight">
+              Nocom Finance
+            </span>
+          </div>
 
           {/* Headline */}
           <h1 className="font-serif text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.95] tracking-tight mb-6 text-white drop-shadow-xl">
