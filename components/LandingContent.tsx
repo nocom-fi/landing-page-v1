@@ -136,14 +136,14 @@ export default function LandingContent() {
       {/* Footer */}
       <footer className="relative z-10 w-full py-8 md:py-12 mt-auto">
         <div className="flex items-center justify-center gap-8">
-          <a href="#" className="text-slate-500 hover:text-[#870ec4] transition-colors duration-300 group">
-            <span className="sr-only">Twitter</span>
+          <a href="https://x.com/nocomfinance" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#870ec4] transition-colors duration-300 group">
+            <span className="sr-only">X (Twitter)</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
               <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
               <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
             </svg>
           </a>
-          <a href="#" className="text-slate-500 hover:text-[#870ec4] transition-colors duration-300">
+          <a href="https://github.com/nocom-fi" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#870ec4] transition-colors duration-300">
             <span className="sr-only">GitHub</span>
             <Github className="w-6 h-6" />
           </a>
