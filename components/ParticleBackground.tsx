@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -11,11 +11,25 @@ interface ParticleBackgroundProps {
   contentBoxRef: React.RefObject<HTMLDivElement | null>;
 }
 
+const MOBILE_BREAKPOINT = 768;
+
 export default function ParticleBackground({ contentBoxRef }: ParticleBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || isMobile) return;
 
     const canvas = canvasRef.current;
 
@@ -407,7 +421,12 @@ export default function ParticleBackground({ contentBoxRef }: ParticleBackground
       renderer.dispose();
       scene.clear();
     };
-  }, [contentBoxRef]);
+  }, [contentBoxRef, isMobile]);
+
+  // Don't render canvas on mobile
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <canvas
